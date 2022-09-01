@@ -1,18 +1,29 @@
-import React, { useState, useMemo } from "react";
+import React, { useState, useMemo, useEffect, useCallback } from "react";
 
-function UseMemo () {
-    // 1. optimize expensive operation
-    // 2. Referential equality
+function UseCallback () {
+    // 1. Memoize the function (useCallback) vs Memoize the value (useMemo)
+    // 2. referential equality for functions
 
     const [counter, setCounter] = useState(1);
     // const result = factorial(counter);   // normal use but its get some extra time
     const result = useMemo(() => {
         return factorial(counter);
     }, [counter]);
+
+    console.log("useMemo :", result);
+
     const [name, setName] = useState("");
 
+
+
+    const displayName = useCallback(() => {
+        return name;
+    }, [name]);
+
+    console.log("useCallback :", displayName);
+
     return (
-        <div className="UseMemo">
+        <div className="UseCallback">
             <h1>
                 Factorial of {counter} is 
                 <span>{result}</span>
@@ -33,7 +44,7 @@ function UseMemo () {
                     onChange={(e) => setName(e.target.value)}
                 />
                 <hr></hr>
-                <DisplayName name={name}></DisplayName>
+                <DisplayName displayName={displayName}></DisplayName>
                 {/* <p>{`my name is ${name}`}</p> */}
 
             </div>
@@ -41,10 +52,22 @@ function UseMemo () {
     );
 }
 
-const DisplayName = React.memo (({ name }) => {          //useMemo cannot be called at the top level
-    console.log("rendered");                             // so we use React.usememo
-    return <p>{`my name is ${name}`}</p>
-});
+const DisplayName = ({ displayName }) => {
+    const [value, setValue] = useState("");
+    useEffect(() => {
+        
+         setValue(displayName());
+         console.log("component rendered");
+        
+    }, [displayName]);
+
+    return <p>{`my name is ${value}`}</p>;
+};
+
+// const DisplayName = React.memo (({ name }) => {          //useMemo cannot be called at the top level
+//     console.log("rendered");                             // so we use React.usememo
+//     return <p>{`my name is ${name}`}</p>
+// });
 
 // const DisplayName = ( {name} ) => {               //suppose we can use like this
 //     console.log("rendered");                      //its name and counter re render so we use UseMwmo
@@ -64,4 +87,4 @@ function factorial (n) {
 }
 
 
-export default UseMemo;
+export default UseCallback;
