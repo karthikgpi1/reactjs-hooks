@@ -44,16 +44,16 @@ function App() {
          <div> hello,{name}</div>
          <button onClick={changeName}>Click me</button>
          <hr></hr>
-         //-------
+         
          <div> hello,{Flag ? "" : name}</div>
          <button onClick={changeName}>Click me</button>
          <hr></hr>
 
-         //-----------------------------
+         
          <button onClick={increment}>+</button>
          <div>{steps}</div>
          <button onClick={decrement}>-</button>
-         //----------------------------- 
+         
          <hr></hr>
          <form onSubmit={addnames}>
           <input type="text" value={name} placeholder="add names"
